@@ -29,7 +29,6 @@
 				"arguments": ["${VARIAVEL_TESTE}"],
 				"working_directory": null
 			}]
-		}],
-		
+		}]
 	}]
 }
