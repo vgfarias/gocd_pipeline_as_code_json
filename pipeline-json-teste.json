@@ -1,6 +1,6 @@
 {
 	"name": "pipeline_json_teste",
-	"environment_variables": ["VARIAVEL_TESTE": "VALOR_VARIAVEL"],
+	"environment_variables": [{"VARIAVEL_TESTE": "VALOR_VARIAVEL"}],
 	"group": "pipeline_group_json_teste",
 	"materials": [{
 		"url": "https://github.com/vgfarias/gocd_pipeline_as_code_json.git",
@@ -8,7 +8,7 @@
 	}],
 	"stages": [{
 		"name": "stage_1",
-		"fetch_materials": "true";,
+		"fetch_materials": "true",
 		"never_cleanup_artifacts": "false",
 		"clean_working_directory": "false",
 		"environment_variables": [],
