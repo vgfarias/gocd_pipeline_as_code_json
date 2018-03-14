@@ -3,10 +3,8 @@
 	"environment_variables": ["VARIAVEL_TESTE": "VALOR_VARIAVEL"],
 	"group": "pipeline_group_json_teste",
 	"materials": [{
-		"url": "http://infosvn.ogmaster.local/svn/EquipeQA/continuous_delivery/trunk/",
-		"type": "svn",
-		"username": "victor.farias",
-		"password": ""
+		"url": "https://github.com/vgfarias/gocd_pipeline_as_code_json.git",
+		"type": "git",
 	}],
 	"stages": [{
 		"name": "stage_1",
