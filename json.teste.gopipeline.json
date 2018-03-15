@@ -11,7 +11,7 @@
 		"fetch_materials": "true",
 		"never_cleanup_artifacts": "false",
 		"clean_working_directory": "false",
-		"environment_variables": [{"VARIAVEL_TESTE": "VALOR_VARIAVEL"}],
+		"environment_variables": [],
 		"jobs": [{
 			"name": "job_1",
 			"environment_variables": [],
@@ -26,7 +26,7 @@
 				"run_if": "passed",
 				"on_cancel": null,
 				"command": "echo",
-				"arguments": [{"$[VARIAVEL_TESTE"}}],
+				"arguments": [],
 				"working_directory": null
 			}]
 		}]
