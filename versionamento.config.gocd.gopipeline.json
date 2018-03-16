@@ -11,7 +11,7 @@
 		{
 			"url": "http://infosvn.ogmaster.local/svn/EquipeQA/go-continuous-delivery/branches/teste_pipeline_as_code/",
 			"username": "jenkinssvn",
-			"encrypted_password": "IbPeloYtNrJHxbOwjFtaCA==",
+			"encrypted_password": "IbPeloYtNrJHxbOwjFtaCA",
 			"check_externals": true,
 			"filter": {},
 			"destination": "gocd-config",
