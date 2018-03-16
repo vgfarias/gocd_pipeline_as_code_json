@@ -43,7 +43,7 @@
 					"tasks": [
 						{
 							"type": "exec",
-							"run_if": "passed",
+							"run_if": "failed",
 							"on_cancel": null,
 							"command": "/bin/bash",
 							"arguments": [
