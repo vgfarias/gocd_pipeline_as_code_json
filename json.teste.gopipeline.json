@@ -26,7 +26,7 @@
 				"run_if": "passed",
 				"on_cancel": null,
 				"command": "echo",
-				"arguments": [{"argument":"teste"}],
+				"arguments": ["teste"],
 				"working_directory": null
 			}]
 		}]
