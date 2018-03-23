@@ -1,0 +1,315 @@
+{
+	"format_version": 1,
+	"group": "Portal_Do_Anunciante",
+	"name": "portal_do_anunciante_internet_staging",
+	"label_template": "${PortalDoAnunciante}",
+	"parameters": [],
+	"mingle": {
+		
+	},
+	"tracking_tool": null,
+	"environment_variables": [],
+	"materials": [{
+		"pipeline": "portal_do_anunciante_commit_stage",
+		"stage": "gerar_pacote",
+		"name": "PortalDoAnunciante",
+		"type": "dependency"
+	}],
+	"lock_behavior": "lockOnFailure",
+	"stages": [{
+		"name": "backup_arquivos_vivos",
+		"fetch_materials": true,
+		"never_cleanup_artifacts": false,
+		"clean_working_directory": true,
+		"approval": {
+			"type": "manual"
+		},
+		"environment_variables": [{
+			"name": "MSBUILD_HOME",
+			"value": "C:\Windows\Microsoft.NET\Framework\v4.0.30319"
+		},
+		{
+			"name": "TARGET_NAME",
+			"value": "backup"
+		},
+		{
+			"name": "SERVER_NAME",
+			"value": "infowebdmzqa3"
+		},
+		{
+			"name": "SHARE_NAME",
+			"value": "novo$"
+		}],
+		"jobs": [{
+			"name": "backup_arquivos_vivos",
+			"run_instance_count": null,
+			"environment_variables": [],
+			"timeout": 0,
+			"elastic_profile_id": null,
+			"tabs": [],
+			"resources": ["windows1",
+			],
+			"artifacts": [],
+			"properties": [],
+			"tasks": [{
+				"type": "fetch",
+				"run_if": "passed",
+				"pipeline": "portal_do_anunciante_commit_stage",
+				"stage": "gerar_pacote",
+				"job": "gerar_pacote",
+				"is_source_a_file": false,
+				"source": "Internet""destination": ""
+			},
+			{
+				"type": "fetch",
+				"run_if": "passed",
+				"pipeline": "portal_do_anunciante_commit_stage",
+				"stage": "gerar_pacote",
+				"job": "gerar_pacote",
+				"is_source_a_file": false,
+				"source": "Config",
+				"destination": ""
+			},
+			{
+				"type": "fetch",
+				"run_if": "passed",
+				"pipeline": "portal_do_anunciante_commit_stage",
+				"stage": "gerar_pacote",
+				"job": "gerar_pacote",
+				"is_source_a_file": true,
+				"source": "deploy.xml",
+				"destination": ""
+			},
+			{
+				"type": "fetch",
+				"run_if": "passed",
+				"pipeline": "portal_do_anunciante_commit_stage",
+				"stage": "gerar_pacote",
+				"job": "gerar_pacote",
+				"is_source_a_file": true,
+				"source": "live-files.xml",
+				"destination": ""
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "echo",
+				"arguments": ["'Backup de arquivos vivos'"],
+				"working_directory": ""
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "%MSBUILD_HOME%/msbuild.exe",
+				"arguments": ["live-files.xml",
+				"/t:%TARGET_NAME%",
+				"/p:InternetServerName=%SERVER_NAME%",
+				"/p:InternetShareName=%SHARE_NAME%"],
+				"working_directory": ""
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "%MSBUILD_HOME%/msbuild.exe",
+				"arguments": ["live-files.xml",
+				"/t:backup",
+				"/p:InternetServerName=infowebdmzqa4",
+				"/p:InternetShareName=novo$"],
+				"working_directory": ""
+			}]
+		}]
+	},
+	{
+		"name": "deploy_staging_infowebdmzqa3",
+		"fetch_materials": false,
+		"never_cleanup_artifacts": false,
+		"clean_working_directory": false,
+		"environment_variables": [{
+			"name": "MSBUILD_HOME",
+			"value": "C:\Windows\Microsoft.NET\Framework64\v4.0.30319",
+			
+		},
+		{
+			"name": "TARGET_NAME",
+			"value": "copy-internet"
+		},
+		{
+			"name": "CONFIG_ENV",
+			"value": "qlt"
+		},
+		{
+			"name": "SERVER_NAME",
+			"value": "infowebdmzqa3"
+		},
+		{
+			"name": "SHARE_NAME",
+			"value": "novo$"
+		},
+		{
+			"name": "ORIGEM_PACOTE",
+			"value": "E:\GoAgent1\pipelines\portal_do_anunciante_branch_internet_staging\Internet"
+		},
+		{
+			"name": "ORIGEM_CONFIG",
+			"value": "E:\GoAgent1\pipelines\portal_do_anunciante_branch_internet_staging\Config"
+		}],
+		"jobs": [{
+			"name": "deploy",
+			"run_instance_count": null,
+			"environment_variables": [],
+			"timeout": 0,
+			"elastic_profile_id": null,
+			"tabs": [],
+			"resources": ["windows1",
+			],
+			"artifacts": [],
+			"properties": [],
+			"tasks": [{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "echo",
+				"arguments": ["'Deploy de arquivos do front-end no servidor infowebdmzqa3'"],
+				"working_directory": ""
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "%MSBUILD_HOME%/msbuild.exe",
+				"arguments": ["deploy.xml",
+				"/t:%TARGET_NAME%",
+				"/p:ConfigEnv=%CONFIG_ENV%",
+				"/p:ServerName=%SERVER_NAME%",
+				"/p:ShareName=%SHARE_NAME%",
+				"/p:Internet=%ORIGEM_PACOTE%",
+				"/p:ConfigAppSettings=%ORIGEM_CONFIG%"],
+				"working_directory": ""
+			}]
+		}]
+	},
+	{
+		"name": "deploy_staging_infowebdmzqa4",
+		"fetch_materials": false,
+		"never_cleanup_artifacts": false,
+		"clean_working_directory": false,
+		"environment_variables": [{
+			"name": "MSBUILD_HOME",
+			"value": "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
+		},
+		{
+			"name": "TARGET_NAME",
+			"value": "copy-internet",
+			
+		},
+		{
+			"name": "CONFIG_ENV",
+			"value": "qlt"
+		},
+		{
+			"name": "SERVER_NAME",
+			"value": "infowebdmzqa4"
+		},
+		{
+			"name": "SHARE_NAME",
+			"value": "novo$"
+		},
+		{
+			"name": "ORIGEM_PACOTE",
+			"value": "E:\GoAgent1\pipelines\portal_do_anunciante_branch_internet_staging\Internet"
+		},
+		{
+			"name": "ORIGEM_CONFIG",
+			"value": "E:\GoAgent1\pipelines\portal_do_anunciante_branch_internet_staging\Config"
+		}],
+		"jobs": [{
+			"name": "deploy",
+			"run_instance_count": null,
+			"environment_variables": [],
+			"timeout": 0,
+			"elastic_profile_id": null,
+			"tabs": [],
+			"resources": ["windows1",
+			],
+			"artifacts": [],
+			"properties": [],
+			"tasks": [{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "echo",
+				"arguments": ["'Deploy de arquivos do front-end no servidor infowebdmzqa4'"],
+				"working_directory": ""
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "%MSBUILD_HOME%/msbuild.exe",
+				"arguments": ["deploy.xml",
+				"/t:%TARGET_NAME%",
+				"/p:ConfigEnv=%CONFIG_ENV%",
+				"/p:ServerName=%SERVER_NAME%",
+				"/p:ShareName=%SHARE_NAME%",
+				"/p:Internet=%ORIGEM_PACOTE%",
+				"/p:ConfigAppSettings=%ORIGEM_CONFIG%"],
+				"working_directory": ""
+			}]
+		}]
+	},
+	{
+		"name": "restaurar_backup_arquivos_vivos",
+		"fetch_materials": false,
+		"never_cleanup_artifacts": false,
+		"clean_working_directory": false,
+		"environment_variables": [{
+			"name": "MSBUILD_HOME",
+			"value": "C:\Windows\Microsoft.NET\Framework\v4.0.30319"
+		}],
+		"jobs": [{
+			"name": "restaurar_backup_arquivos_vivos",
+			"run_instance_count": null,
+			"environment_variables": [],
+			"timeout": 0,
+			"elastic_profile_id": null,
+			"tabs": [],
+			"resources": ["windows1",
+			],
+			"artifacts": [],
+			"properties": [],
+			"tasks": [{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "echo",
+				"arguments": ["'Restauração dos arquivos vivos'"],
+				"working_directory": ""
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "%MSBUILD_HOME%/msbuild.exe",
+				"arguments": ["live-files.xml",
+				"/t:restore",
+				"/p:InternetServerName=infowebdmzqa3",
+				"/p:InternetShareName=novo$"],
+				"working_directory": ""
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "%MSBUILD_HOME%/msbuild.exe",
+				"arguments": ["live-files.xml",
+				"/t:restore",
+				"/p:InternetServerName=infowebdmzqa4",
+				"/p:InternetShareName=novo$"],
+				"working_directory": ""
+			}]
+		}]
+	}]
+}
