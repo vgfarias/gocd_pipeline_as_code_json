@@ -1,0 +1,166 @@
+{
+	"format_version": 1,
+	"group": "Portal_Do_Anunciante",
+	"name": "portal_do_anunciante_commit_stage",
+	"label_template": "Revision-${PortalDoAnunciante}",
+	"parameters": [],
+	"mingle": {
+		
+	},
+	"tracking_tool": null,
+	"environment_variables": [],
+	"materials": [{
+		"url": "http://infosvn.ogmaster.local/svn/PortalAnunciante/trunk/",
+		"username": "jenkinssvn",
+		"encrypted_password": "IbPeloYtNrJHxbOwjFtaCA==",
+		"check_externals": "false",
+		"filter": {
+			
+		},
+		"destination": "PortalDoAnunciante",
+		"auto_update": true,
+		"name": "PortalDoAnunciante",
+		"type": "svn"
+	}],
+	"stages": [{
+		"name": "registrar_componentes",
+		"fetch_materials": true,
+		"never_cleanup_artifacts": false,
+		"clean_working_directory": true,
+		"approval": {
+			"type": "manual"
+		},
+		"environment_variables": [],
+		"jobs": [{
+			"name": "registrar_componentes",
+			"run_instance_count": null,
+			"environment_variables": [],
+			"timeout": 0,
+			"elastic_profile_id": null,
+			"tabs": [],
+			"resources": ["windows1",
+			],
+			"artifacts": [],
+			"properties": [],
+			"tasks": [{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "regsvr32",
+				"arguments": ["/s",
+				"..\referencias\xmlDLL.dll"],
+				"working_directory": "PortalDoAnunciante/PortalDoAnunciante"
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "regsvr32",
+				"arguments": ["/s",
+				"c:\ATEX\sapix\FindPhone.dll"],
+				"working_directory": "PortalDoAnunciante/PortalDoAnunciante"
+			}]
+		}]
+	},
+	{
+		"name": "gerar_pacote",
+		"fetch_materials": false,
+		"never_cleanup_artifacts": false,
+		"clean_working_directory": false,
+		"approval":{
+			"type": "on_success"
+		},
+		"environment_variables": [{
+				"name": "MSBUILD_HOME",
+				"value": "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
+			},
+			{
+				"name": "CAMINHO_DEPLOY",
+				"value": "E:\GoAgent\pipelines\portal_do_anunciante_branch_commit_stage"
+			},
+			{
+				"name": "CAMINHO_ZIP",
+				"value": "E:\GoAgent\pipelines\portal_do_anunciante_branch_commit_stage"
+			},
+			{
+				"name": "DEVENV_HOME",
+				"value": "C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE"
+		}],
+		"jobs": [{
+			"name": "gerar_pacote",
+			"run_instance_count": null,
+			"environment_variables": [],
+			"timeout": 0,
+			"elastic_profile_id": null,
+			"tabs": [],
+			"resources": [
+				"windows1",
+			],
+			"artifacts": [{
+				"source": "Deploy/Config",
+				"destination": "",
+				"type": "build"
+			},
+			{
+				"source": "Deploy/AppServer",
+				"destination": "",
+				"type": "build"
+			},
+			{
+				"source": "Deploy/Integracao",
+				"destination": "",
+				"type": "build"
+			},
+			{
+				"source": "Deploy/Internet",
+				"destination": "",
+				"type": "build"
+			},
+			{
+				"source": "Deploy/Intranet",
+				"destination": "",
+				"type": "build"
+			},
+			{
+				"source": "PortalDoAnunciante/PortalDoAnunciante/live-files.xml",
+				"destination": "",
+				"type": "build"
+			},
+			{
+				"source": "PortalDoAnunciante/PortalDoAnunciante/deploy.xml",
+				"destination": "",
+				"type": "build"
+			}],
+			"properties": [],
+			"tasks": [{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "devenv",
+				"arguments": [
+					"PortalDoAnunciante.sln",
+					"/Build",
+					"Deploy"
+				],
+				"working_directory": "PortalDoAnunciante/PortalDoAnunciante"
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "%MSBUILD_HOME%/msbuild",
+				"arguments": [
+					"deploy.xml",
+					"/p:CaminhoDeploy=%CAMINHO_DEPLOY%",
+					"/p:CaminhoZip=%CAMINHO_ZIP%",
+					"/t:DeployInternet",
+					"/t:DeployIntranet",
+					"/t:DeployIntegrador",
+					"/t:DeployApp",
+					"/t:DeployConfigAppSettings"
+				],
+				"working_directory": "PortalDoAnunciante/PortalDoAnunciante"
+			}]
+		}]
+	}]
+}
