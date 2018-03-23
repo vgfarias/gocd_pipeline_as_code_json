@@ -67,9 +67,6 @@
 		"fetch_materials": false,
 		"never_cleanup_artifacts": false,
 		"clean_working_directory": false,
-		"approval":{
-			"type": "on_success"
-		},
 		"environment_variables": [{
 				"name": "MSBUILD_HOME",
 				"value": "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
