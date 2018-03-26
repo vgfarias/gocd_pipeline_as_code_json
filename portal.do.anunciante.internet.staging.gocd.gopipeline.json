@@ -58,7 +58,8 @@
 				"stage": "gerar_pacote",
 				"job": "gerar_pacote",
 				"is_source_a_file": false,
-				"source": "Internet""destination": ""
+				"source": "Internet",
+				"destination": ""
 			},
 			{
 				"type": "fetch",
