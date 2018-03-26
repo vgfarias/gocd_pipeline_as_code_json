@@ -4,79 +4,68 @@
 	"name": "versionamento_config_gocd",
 	"label_template": "Revision-${gocd-config}",
 	"parameters": [],
-	"mingle": {},
+	"mingle": {
+		
+	},
 	"tracking_tool": null,
 	"environment_variables": [],
-	"materials":[
-		{
-			"url": "http://infosvn.ogmaster.local/svn/EquipeQA/go-continuous-delivery/branches/teste_pipeline_as_code/",
-			"username": "jenkinssvn",
-			"encrypted_password": "IbPeloYtNrJHxbOwjFtaCA==",
-			"check_externals": true,
-			"filter": {},
-			"destination": "gocd-config",
-			"auto_update": false,
-			"name": "gocd-config",
-			"type": "svn"
-		}
-	],
-	"stages":[
-		{
+	"materials": [{
+		"url": "http://infosvn.ogmaster.local/svn/EquipeQA/go-continuous-delivery/branches/teste_pipeline_as_code/",
+		"username": "jenkinssvn",
+		"encrypted_password": "IbPeloYtNrJHxbOwjFtaCA==",
+		"check_externals": true,
+		"filter": {
+			
+		},
+		"destination": "gocd-config",
+		"auto_update": false,
+		"name": "gocd-config",
+		"type": "svn"
+	}],
+	"stages": [{
+		"name": "versionamento",
+		"fetch_materials": true,
+		"never_cleanup_artifacts": false,
+		"clean_working_directory": true,
+		"environment_variables": [],
+		"jobs": [{
 			"name": "versionamento",
-			"fetch_materials": true,
-			"never_cleanup_artifacts": false,
-			"clean_working_directory": true,
+			"run_instance_count": null,
 			"environment_variables": [],
-			"jobs": [
-				{
-					"name": "versionamento",
-					"run_instance_count": null,
-					"environment_variables": [],
-					"timeout": 0,
-					"elastic_profile_id": null,
-					"tabs": [],
-					"resources": [
-						"linux",
-					],
-					"artifacts": [],
-					"properties": [],
-					"tasks": [
-						{
-							"type": "exec",
-							"run_if": "passed",
-							"on_cancel": null,
-							"command": "/bin/bash",
-							"arguments": [
-								"-c",
-								"rm cruise-config.xml"
-							],
-							"working_directory": "gocd-config"
-						},
-						{
-							"type": "exec",
-							"run_if": "passed",
-							"on_cancel": null,
-							"command": "/bin/bash",
-							"arguments": [
-								"-c",
-								"cp /etc/go/cruise-config.xml cruise-config.xml"
-							],
-							"working_directory": "gocd-config"
-						},
-						{
-							"type": "exec",
-							"run_if": "passed",
-							"on_cancel": null,
-							"command": "/bin/bash",
-							"arguments": [
-								"-c",
-								"svn ci -m 'Versionamento do config via pipeline'"
-							],
-							"working_directory": "gocd-config"
-						}
-					]
-				}
-			]
-		}
-	]
+			"timeout": 0,
+			"elastic_profile_id": null,
+			"tabs": [],
+			"resources": ["linux",
+			],
+			"artifacts": [],
+			"properties": [],
+			"tasks": [{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "/bin/bash",
+				"arguments": ["-c",
+				"rm cruise-config.xml"],
+				"working_directory": "gocd-config"
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "/bin/bash",
+				"arguments": ["-c",
+				"cp /etc/go/cruise-config.xml cruise-config.xml"],
+				"working_directory": "gocd-config"
+			},
+			{
+				"type": "exec",
+				"run_if": "passed",
+				"on_cancel": null,
+				"command": "/bin/bash",
+				"arguments": ["-c",
+				"svn ci -m 'Versionamento do config via pipeline'"],
+				"working_directory": "gocd-config"
+			}]
+		}]
+	}]
 }
